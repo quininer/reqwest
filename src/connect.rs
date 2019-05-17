@@ -19,11 +19,15 @@ use std::time::Duration;
 
 #[cfg(feature = "trust-dns")]
 use dns::TrustDnsResolver;
+#[cfg(feature = "gai-dns")]
+use gai::GaiDnsResolver;
 use proxy::{Proxy, ProxyScheme};
 
+#[cfg(feature = "gai-dns")]
+type HttpConnector = ::hyper::client::HttpConnector<GaiDnsResolver>;
 #[cfg(feature = "trust-dns")]
 type HttpConnector = ::hyper::client::HttpConnector<TrustDnsResolver>;
-#[cfg(not(feature = "trust-dns"))]
+#[cfg(not(any(feature = "trust-dns", feature = "gai-dns")))]
 type HttpConnector = ::hyper::client::HttpConnector;
 
 
@@ -196,6 +200,11 @@ impl Connector {
     }
 }
 
+#[cfg(feature = "gai-dns")]
+fn http_connector() -> ::Result<HttpConnector> {
+    Ok(HttpConnector::new_with_resolver(GaiDnsResolver))
+}
+
 #[cfg(feature = "trust-dns")]
 fn http_connector() -> ::Result<HttpConnector> {
     TrustDnsResolver::new()
@@ -203,7 +212,7 @@ fn http_connector() -> ::Result<HttpConnector> {
         .map_err(::error::dns_system_conf)
 }
 
-#[cfg(not(feature = "trust-dns"))]
+#[cfg(not(any(feature = "trust-dns", feature = "gai-dns")))]
 fn http_connector() -> ::Result<HttpConnector> {
     Ok(HttpConnector::new(4))
 }

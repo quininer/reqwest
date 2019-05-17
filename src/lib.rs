@@ -222,6 +222,11 @@ extern crate rustls;
 #[macro_use]
 extern crate doc_comment;
 
+#[cfg(feature = "gai-dns")]
+extern crate libc;
+#[cfg(feature = "gai-dns")]
+extern crate socket2;
+
 #[cfg(test)]
 doctest!("../README.md");
 
@@ -254,6 +259,8 @@ mod client;
 pub mod cookie;
 #[cfg(feature = "trust-dns")]
 mod dns;
+#[cfg(feature = "gai-dns")]
+mod gai;
 mod into_url;
 mod proxy;
 mod redirect;

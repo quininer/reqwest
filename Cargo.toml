@@ -50,6 +50,9 @@ cookie_store = "0.7.0"
 cookie = "0.12.0"
 time = "0.1.42"
 
+libc = { version = "0.2", optional = true }
+socket2 = { version = "0.3", optional = true }
+
 [dev-dependencies]
 env_logger = "0.6"
 serde_derive = "1.0"
@@ -70,3 +73,5 @@ rustls-tls = ["hyper-rustls", "tokio-rustls", "webpki-roots", "rustls", "tls"]
 trust-dns = ["trust-dns-resolver"]
 
 hyper-011 = ["hyper-old-types"]
+
+gai-dns = ["libc", "socket2"]
