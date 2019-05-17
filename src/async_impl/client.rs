@@ -165,7 +165,7 @@ impl ClientBuilder {
                         tls.set_protocols(&["h2".into()]);
                     } else {
                         tls.set_protocols(&[
-                            "h2".into(),
+//                            "h2".into(),
                             "http/1.1".into(),
                         ]);
                     }
